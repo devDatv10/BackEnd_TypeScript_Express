@@ -8,7 +8,6 @@ const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const db: any = {};
 
-// Khởi tạo Sequelize
 const sequelizeConfig = config[env];
 const sequelize = new Sequelize(
   sequelizeConfig.database,
@@ -20,7 +19,6 @@ const sequelize = new Sequelize(
   }
 );
 
-// Đọc và nạp tất cả các models
 fs.readdirSync(__dirname)
   .filter(
     (file) =>
@@ -33,7 +31,6 @@ fs.readdirSync(__dirname)
     db[model.name] = model;
   });
 
-// Thiết lập quan hệ giữa các models
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
     db[modelName].associate(db);

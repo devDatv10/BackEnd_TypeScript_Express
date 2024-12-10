@@ -53,6 +53,12 @@ export const createUser = async (req: Request, res: Response) => {
   }
 
   try {
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      res.status(400).json({ error: "Email already exists" });
+      return;
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({
@@ -104,6 +110,12 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 
   try {
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      res.status(400).json({ error: "Email already exists" });
+      return;
+    }
+
     const user = await User.findByPk(id);
     if (!user) {
       res.status(404).json({ error: "User not found" });
